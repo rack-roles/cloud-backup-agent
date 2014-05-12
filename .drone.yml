@@ -3,4 +3,4 @@ script:
   - git clone https://github.com/rack-roles/test.ping
   - bash test.ping/lint.sh
   - ansible-galaxy install -r /var/cache/drone/src/github.com/rack-roles/cloud-backup-agent/tests/roles.list
-  - ansible-playbook /var/cache/drone/src/github.com/rack-roles/cloud-backup-agent/tests/main.yml --connection=local
+  - ansible-playbook /var/cache/drone/src/github.com/rack-roles/cloud-backup-agent/tests/main.yml --connection=local --extra-vars "rackspace_username={{ rax_user }} rackspace_apikey={{ rax_key }}"
