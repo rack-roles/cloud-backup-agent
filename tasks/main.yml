@@ -9,8 +9,8 @@
 - name: install backup agent
   apt: name=driveclient state=present update_cache=yes cache_valid_time=86400
 
-#- name: setup the backup agent
-#  command: rackspace-monitoring-agent --setup --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} creates=/etc/rackspace-monitoring-agent.cfg
+- name: setup the backup agent
+  command: driveclient --configure --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} creates=/etc/driveclient/bootstrap.json
 
 - name: ensure agent is started
   service: name=driveclient state=started
