@@ -10,7 +10,13 @@
   apt: name=driveclient state=present update_cache=yes cache_valid_time=86400
 
 - name: setup the backup agent
-  command: driveclient --configure --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} creates=/etc/driveclient/bootstrap.json
+  command: driveclient --configure --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} creates=/etc/driveclient/ansible_ran
+
+- name: first run touch
+  file: path=/etc/driveclient/ansible_ran state=touch
 
 - name: ensure agent is started
   service: name=driveclient state=started
+
+- name: remove extra apt source
+  file: path=/etc/apt/sources.list.d/driveclient.list state=absent
