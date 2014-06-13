@@ -12,8 +12,13 @@
 - name: setup the backup agent
   command: driveclient --configure --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} --flavor {{ driveclient_flavor }} creates=/etc/driveclient/ansible_ran
 
+- name: check for run file
+  stat: path=/etc/driveclient/ansible_ran
+  register: ansible_ran
+
 - name: first run file flag
-  copy: src="" dest=/etc/driveclient/ansible_ran
+  file: path=/etc/driveclient/ansible_ran state=touch
+  when: ansible_ran.stat.exists
 
 - name: ensure agent is started
   service: name=driveclient state=started
