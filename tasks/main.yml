@@ -1,13 +1,13 @@
 ---
 # tasks file for cloud-backup-agent
-- name: setup backup agent apt key
-  apt_key: url='http://agentrepo.drivesrvr.com/debian/agentrepo.key' state=present
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: setup backup agent apt repository
-  apt_repository: repo='deb [arch=amd64] http://agentrepo.drivesrvr.com/debian/ serveragent main' state=present
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: install backup agent
-  apt: name=driveclient state=present update_cache=yes cache_valid_time=86400
+- include: unsupported_os.yml
+  when: cloud_backup_agent_supported_os is not defined
 
 - name: setup the backup agent
   command: driveclient --configure --username {{ rackspace_username }} --apikey {{ rackspace_apikey }} --flavor {{ driveclient_flavor }} creates=/etc/driveclient/ansible_ran
@@ -21,7 +21,4 @@
   when: ansible_ran.stat.exists is not defined
 
 - name: ensure agent is started
-  service: name=driveclient state=started
-
-- name: remove extra apt source
-  file: path=/etc/apt/sources.list.d/driveclient.list state=absent
+  service: name=driveclient state=started enabled=yes
