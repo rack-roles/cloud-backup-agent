@@ -18,7 +18,7 @@
 
 - name: first run file flag
   file: path=/etc/driveclient/ansible_ran state=touch
-  when: ansible_ran.stat.exists is not defined
+  when: ansible_ran.stat.exists == False
 
 - name: ensure agent is started
   service: name=driveclient state=started enabled=yes
